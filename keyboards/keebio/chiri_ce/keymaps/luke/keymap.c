@@ -44,8 +44,7 @@ enum custom_layers {
      GAME,
      NAV,
      SYS,
-     NUM,
-     CFG
+     NUM
 };
 
 /**
@@ -54,9 +53,9 @@ enum custom_layers {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [DFLT] = LAYOUT(
     // ┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
-        KC_ESC,  KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,                               KC_J,    KC_L,    KC_U,    KC_Y,    KC_QUOT, KC_BSLS,
+        SYS_TAB, KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,                               KC_J,    KC_L,    KC_U,    KC_Y,    KC_QUOT, KC_BSLS,
     // ├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-        SYS_TAB, HRM_A,   HRM_R,   HRM_S,   HRM_T,   KC_G,                               KC_M,    HRM_N,   HRM_E,   HRM_I,   HRM_O,   SYS_QUOT,
+        KC_ESC,  HRM_A,   HRM_R,   HRM_S,   HRM_T,   KC_G,                               KC_M,    HRM_N,   HRM_E,   HRM_I,   HRM_O,   SYS_QUOT,
     // ├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
         KC_LCTL, KC_Z,    KC_X,    KC_C,    KC_D,    KC_V,    NUM_ENT,          NUM_ENT, KC_K,    KC_H,    KC_COMM, KC_DOT,  KC_SLSH, KC_ENT,
     // └────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘

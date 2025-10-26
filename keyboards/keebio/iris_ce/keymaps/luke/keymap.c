@@ -4,7 +4,6 @@
 #include QMK_KEYBOARD_H
 #include "eeprom.h"
 #include "timer.h"
-#include "rgb_matrix.h"
 
 // Named HSV tuples for readability
 #define WHITE       0, 0
@@ -13,22 +12,29 @@
 #define BLUE      170, 255
 #define PURPLE    191, 255
 
-// standard alias
+// key tap aliases
 #define LSG_S LSG(KC_S)
 
-// mod tap aliases
-#define BRM_Z MT(MOD_LCTL, KC_Z)
-#define BRM_X MT(MOD_LALT, KC_X)
-#define BRM_C MT(MOD_LGUI, KC_C)
-#define BRM_COMM MT(MOD_RGUI, KC_COMM)
-#define BRM_DOT MT(MOD_RALT, KC_DOT)
-#define BRM_SLSH MT(MOD_RCTL, KC_SLSH)
+// home row mod aliases
+#define HRM_A MT(MOD_LCTL, KC_A)
+#define HRM_R MT(MOD_LALT, KC_R)
+#define HRM_S MT(MOD_LGUI, KC_S)
+#define HRM_T MT(MOD_LSFT, KC_T)
 
-// layer/mod tap aliases
+#define HRM_O MT(MOD_RCTL, KC_O)
+#define HRM_I MT(MOD_LALT, KC_I)
+#define HRM_E MT(MOD_RGUI, KC_E)
+#define HRM_N MT(MOD_RSFT, KC_N)
+
+// layer tap aliases
 #define NAV_BS LT(NAV, KC_BSPC)
 #define NAV_SPC LT(NAV, KC_SPC)
 #define NUM_ENT LT(NUM, KC_ENT)
-#define MT_TAB MT(MOD_LSFT, KC_TAB)
+#define SYS_TAB LT(SYS, KC_TAB)
+#define SYS_QUOT LT(SYS, KC_QUOT)
+
+// Mod Tap aliases
+#define LSFT_ESC MT(MOD_LSFT, KC_ESC)
 
 static uint8_t brightness = 64;
 static uint16_t brightness_timer = 0;
@@ -50,13 +56,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // ┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
         QK_GESC, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                               KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______,
     // ├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-        KC_TAB,  KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,                               KC_J,    KC_L,    KC_U,    KC_Y,    KC_QUOT, _______,
+        SYS_TAB, KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,                               KC_J,    KC_L,    KC_U,    KC_Y,    KC_QUOT, KC_BSLS,
     // ├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-        KC_ESC,  KC_A,    KC_R,    KC_S,    KC_T,    KC_G,                               KC_M,    KC_N,    KC_E,    KC_I,    KC_O,    _______,
+        KC_ESC,  HRM_A,   HRM_R,   HRM_S,   HRM_T,   KC_G,                               KC_M,    HRM_N,   HRM_E,   HRM_I,   HRM_O,   SYS_QUOT,
     // ├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-        KC_LCTL, BRM_Z,   BRM_X,   BRM_C,   KC_D,    KC_V,    MO(SYS),          MO(CFG), KC_K,    KC_H,    BRM_COMM,BRM_DOT, BRM_SLSH,KC_ENT,
+        KC_LCTL, KC_Z,    KC_X,    KC_C,    KC_D,    KC_V,    NUM_ENT,          NUM_ENT, KC_K,    KC_H,    KC_COMM, KC_DOT,  KC_SLSH, KC_ENT,
     // └────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
-                                       KC_ESC,  MT_TAB,  NAV_BS,                    NAV_SPC, NUM_ENT, KC_LALT
+                                       KC_ESC,  LSFT_ESC,NAV_BS,                    NAV_SPC, LSFT_ESC, KC_LALT
     //                                └────────┴────────┴────────┘                 └────────┴────────┴────────┘
     ),
 
@@ -68,7 +74,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // ├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
         _______, KC_LSFT, KC_A,    KC_S,    KC_D,    KC_F,                               _______, _______, _______, _______, _______, _______,
     // ├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-        _______, KC_M,    KC_Z,    KC_X,    KC_C,    KC_V,    MO(SYS),          MO(CFG), _______, _______, _______, _______, _______, _______,
+        _______, KC_Z,    KC_X,    KC_C,    KC_M,    KC_V,    NUM_ENT,          _______, _______, _______, _______, _______, _______, _______,
     // └────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                        _______, MO(NAV), KC_SPC,                    _______, _______, _______
     //                                └────────┴────────┴────────┘                 └────────┴────────┴────────┘
@@ -78,13 +84,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // ┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
         KC_TILDE,KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,                            KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, _______,
     // ├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-        _______, KC_TAB,  KC_BSPC, KC_UP,   KC_DEL,  KC_LBRC,                            KC_RBRC, KC_GRV,  KC_PLUS, KC_PIPE, KC_DQUO, _______,
+        _______, KC_I,    KC_Q,    KC_W,    KC_E,    KC_R,                               _______, _______, _______, _______, _______, _______,
     // ├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-        _______, KC_LSFT, KC_LEFT, KC_DOWN, KC_RIGHT,KC_LPRN,                            KC_RPRN, KC_MINS, KC_EQL,  KC_BSLS, KC_SCLN, _______,
+        _______, KC_LSFT, KC_A,    KC_S,    KC_D,    KC_F,                               _______, _______, _______, _______, _______, _______,
     // ├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-        _______, KC_LGUI, _______, KC_HOME, KC_END,  KC_LCBR, _______,          _______, KC_RCBR, KC_UNDS, KC_LT,   KC_GT,   KC_QUES, _______,
+        _______, KC_Z,    KC_X,    KC_C,    KC_M,    KC_V,    NUM_ENT,          _______, _______, _______, _______, _______, _______, _______,
     // └────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
-                                       _______, _______, _______,                   _______, _______, _______
+                                       _______, MO(NAV), KC_SPC,                    _______, _______, _______
     //                                └────────┴────────┴────────┘                 └────────┴────────┴────────┘
     ),
 
@@ -92,13 +98,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // ┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
         KC_F12,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,                              KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,
     // ├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-        _______, LSG_S,   KC_VOLD, KC_MUTE, KC_VOLU, KC_BRIU,                            RGB_VAI, _______, _______, _______, _______, _______,
+        _______, TO(DFLT),TO(GAME),_______, _______, _______,                            _______, _______, _______, _______, _______, _______,
     // ├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-        _______, _______, KC_MPRV, KC_MPLY, KC_MNXT, KC_BRID,                            RGB_VAD, _______, _______, _______, _______, _______,
+        _______, _______, KC_VOLU, KC_MPLY, KC_MNXT, KC_BRIU,                            RM_VALU, _______, _______, _______, _______, _______,
     // ├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-        _______, _______, _______, _______, _______, _______, _______,          _______, _______, _______, _______, _______, _______, _______,
+        QK_BOOT, _______, KC_VOLD, KC_MUTE, KC_MPRV, KC_BRID, _______,          _______, RM_VALD, _______, _______, _______, _______, QK_BOOT,
     // └────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
-                                       QK_BOOT, _______, _______,                   _______, _______, QK_BOOT
+                                       _______, _______, _______,                   _______, _______, _______
     //                                └────────┴────────┴────────┘                 └────────┴────────┴────────┘
     ),
 
@@ -110,23 +116,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // ├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
         _______, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                               KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______,
     // ├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-        _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F11,           KC_F12,  KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  _______,
+        KC_F12,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   _______,          _______, KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,
     // └────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                        _______, _______, _______,                   _______, _______, _______
-    //                                └────────┴────────┴────────┘                 └────────┴────────┴────────┘
-    ),
-
-    [CFG] = LAYOUT(
-    // ┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
-        _______, TO(DFLT),TO(GAME),_______, _______, _______,                            _______, _______, _______, _______, _______, _______,
-    // ├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-        _______, _______, _______, _______, _______, _______,                            _______, _______, _______, _______, _______, _______,
-    // ├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-        _______, _______, _______, _______, _______, _______,                            _______, _______, _______, _______, _______, _______,
-    // ├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-        _______, _______, _______, _______, _______, _______, _______,          _______, _______, _______, _______, _______, _______, _______,
-    // └────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
-                                       QK_BOOT, _______, _______,                   _______, _______, QK_BOOT
     //                                └────────┴────────┴────────┘                 └────────┴────────┴────────┘
     ),
 
@@ -151,14 +143,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case MT(MOD_RGUI, KC_COMM):
-        case MT(MOD_RALT, KC_DOT):
-        case MT(MOD_RCTL, KC_SLSH):
+        // left hand home row mods
+        case MT(MOD_LCTL, KC_A):
+        case MT(MOD_LGUI, KC_R):
+        case MT(MOD_LALT, KC_S):
+        case MT(MOD_LSFT, KC_T):
+        // right hand home row mods
+        case MT(MOD_RCTL, KC_O):
+        case MT(MOD_LALT, KC_I):
+        case MT(MOD_RGUI, KC_E):
+        case MT(MOD_RSFT, KC_N):
             return TAPPING_TERM + 100;
-        case MT(MOD_LALT, KC_X):
-        case MT(MOD_LGUI, KC_C):
-        case MT(MOD_LCTL, KC_Z):
-            return TAPPING_TERM + 200;
         default:
             return TAPPING_TERM;
     }
@@ -171,29 +166,37 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
  */
 uint16_t get_quick_tap_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case MT(MOD_LSFT, KC_TAB):
         case LT(NAV, KC_SPC):
         case LT(NAV, KC_BSPC):
-            return 200;
-        case MT(MOD_LALT, KC_X):
-        case MT(MOD_LGUI, KC_C):
-        case MT(MOD_LCTL, KC_Z):
-            return 300;
+        // left hand home row mods
+        case MT(MOD_LCTL, KC_A):
+        case MT(MOD_LGUI, KC_R):
+        case MT(MOD_LALT, KC_S):
+        case MT(MOD_LSFT, KC_T):
+        // right hand home row mods
+        case MT(MOD_RCTL, KC_O):
+        case MT(MOD_LALT, KC_I):
+        case MT(MOD_RGUI, KC_E):
+        case MT(MOD_RSFT, KC_N):
+            return TAPPING_TERM;
         default:
             return 0;
     }
 }
 
 /**
- * Get hold on other key press
- * If a key is held when another is pressed, treat it as a hold, even if it's within the tapping term
+ * Flow Tap
+ * biases tap-hold keys toward tap (and enables auto-repeat) if pressed right after another key
  */
-bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
-    switch (keycode) {
-        case MT(MOD_LSFT, KC_TAB):
-            return true;
+uint16_t get_flow_tap_term(uint16_t keycode, keyrecord_t *record, uint16_t prev_keycode) {
+    switch (get_tap_keycode(keycode)) {
+        case KC_SPC:
+        case KC_BSPC:
+        case KC_ENT:
+        case KC_TAB:
+            return 0;
         default:
-            return false;
+            return FLOW_TAP_TERM;
     }
 }
 
@@ -203,7 +206,6 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
  */
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case MT(MOD_LSFT, KC_TAB):
         case LT(NAV, KC_SPC):
         case LT(NAV, KC_BSPC):
             return true;
@@ -218,52 +220,20 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
  */
 bool get_retro_tapping(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case MT(MOD_LCTL, KC_Z):
-        case MT(MOD_LALT, KC_X):
-        case MT(MOD_LGUI, KC_C):
-        case MT(MOD_RGUI, KC_COMM):
-        case MT(MOD_RALT, KC_DOT):
-        case MT(MOD_RCTL, KC_SLSH):
+        // left hand home row mods
+        case MT(MOD_LCTL, KC_A):
+        case MT(MOD_LGUI, KC_R):
+        case MT(MOD_LALT, KC_S):
+        case MT(MOD_LSFT, KC_T):
+        // right hand home row mods
+        case MT(MOD_RCTL, KC_O):
+        case MT(MOD_LALT, KC_I):
+        case MT(MOD_RGUI, KC_E):
+        case MT(MOD_RSFT, KC_N):
             return true;
         default:
             return false;
     }
-}
-
-/**
- * Auto Shift
- * Selectively enable autoshift for specific layers & keys
- */
-bool get_auto_shifted_key(uint16_t keycode, keyrecord_t *record) {
-    uint8_t layer = get_highest_layer(layer_state);
-    switch(layer) {
-        case NAV:
-            switch (keycode) {
-                case KC_GRV:
-                case KC_MINS:
-                case KC_EQL:
-                case KC_BSLS:
-                case KC_SCLN:
-                    return true;
-            }
-            break;
-        case NUM:
-            switch (keycode) {
-                case KC_1:
-                case KC_2:
-                case KC_3:
-                case KC_4:
-                case KC_5:
-                case KC_6:
-                case KC_7:
-                case KC_8:
-                case KC_9:
-                case KC_0:
-                    return true;
-            }
-            break;
-    }
-    return false;
 }
 
 /**
@@ -296,18 +266,18 @@ layer_state_t layer_state_set_user(layer_state_t state) {
             rgb_matrix_sethsv_noeeprom(PURPLE, brightness);
             break;
     }
+
     return state;
 }
 
 /**
- * per key handling
+ * per keny handling
  */
-
 void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed) {
         switch (keycode) {
-            case RGB_VAI:
-            case RGB_VAD:
+            case RM_VALU:
+            case RM_VALD:
                 brightness = rgb_matrix_get_val();
                 brightness_timer = timer_read();  // debounce
                 break;
