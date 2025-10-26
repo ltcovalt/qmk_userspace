@@ -7,14 +7,22 @@ permissions:
 
 jobs:
   build:
-    name: 'QMK Userspace Build'
+    strategy:
+      matrix:
+        keyboard:
+          - keebio/chiri_ce/rev1
+          - keebio/iris_ce/rev6
+    name: 'Build ${{ matrix.keyboard }}'
     uses: qmk/.github/.github/workflows/qmk_userspace_build.yml@main
     with:
       qmk_repo: qmk/qmk_firmware
       qmk_ref: master
+      keyboard: ${{ matrix.keyboard }}
+      keymap: luke
+      keymap_introspection: false
 
   publish:
-    name: 'QMK Userspace Publish'
+    name: 'Publish Firmware Artifacts'
     uses: qmk/.github/.github/workflows/qmk_userspace_publish.yml@main
     if: always() && !cancelled()
     needs: build
