@@ -1,6 +1,7 @@
 // Copyright 2023 Danny Nguyen (@nooges)
 // SPDX-License-Identifier: GPL-2.0-or-later
 
+#include "quantum_keycodes.h"
 #include QMK_KEYBOARD_H
 #include "eeprom.h"
 #include "timer.h"
@@ -30,11 +31,8 @@
 #define NAV_BS LT(NAV, KC_BSPC)
 #define NAV_SPC LT(NAV, KC_SPC)
 #define NUM_ENT LT(NUM, KC_ENT)
-#define SYS_TAB LT(SYS, KC_TAB)
+#define SYS_ESC LT(SYS, KC_ESC)
 #define SYS_QUOT LT(SYS, KC_QUOT)
-
-// Mod Tap aliases
-#define LSFT_ESC MT(MOD_LSFT, KC_ESC)
 
 static uint8_t brightness = 64;
 static uint16_t brightness_timer = 0;
@@ -44,8 +42,7 @@ enum custom_layers {
      GAME,
      NAV,
      SYS,
-     NUM,
-     CFG
+     NUM
 };
 
 /**
@@ -56,13 +53,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // ┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
         QK_GESC, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                               KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______,
     // ├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-        SYS_TAB, KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,                               KC_J,    KC_L,    KC_U,    KC_Y,    KC_QUOT, KC_BSLS,
+        KC_TAB,  KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,                               KC_J,    KC_L,    KC_U,    KC_Y,    KC_QUOT, KC_BSLS,
     // ├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-        KC_ESC,  HRM_A,   HRM_R,   HRM_S,   HRM_T,   KC_G,                               KC_M,    HRM_N,   HRM_E,   HRM_I,   HRM_O,   SYS_QUOT,
+        SYS_ESC, HRM_A,   HRM_R,   HRM_S,   HRM_T,   KC_G,                               KC_M,    HRM_N,   HRM_E,   HRM_I,   HRM_O,   SYS_QUOT,
     // ├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-        KC_LCTL, KC_Z,    KC_X,    KC_C,    KC_D,    KC_V,    NUM_ENT,          NUM_ENT, KC_K,    KC_H,    KC_COMM, KC_DOT,  KC_SLSH, KC_ENT,
+        KC_MEH,  KC_Z,    KC_X,    KC_C,    KC_D,    KC_V,    NUM_ENT,          NUM_ENT, KC_K,    KC_H,    KC_COMM, KC_DOT,  KC_SLSH, KC_MEH,
     // └────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
-                                       KC_ESC,  LSFT_ESC,NAV_BS,                    NAV_SPC, LSFT_ESC, KC_LALT
+                                       KC_HYPR, KC_LSFT, NAV_BS,                    NAV_SPC, MO(NUM), KC_HYPR
     //                                └────────┴────────┴────────┘                 └────────┴────────┴────────┘
     ),
 
